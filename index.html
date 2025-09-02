@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Crazy Animated Proposal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Short+Stack&family=Zeyada&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg1:#fff6f6;
+      --bg2:#fff3f8;
+      --accent:#d9304a;
+      --soft:#ffdfe0;
+      --cardW:340px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;font-family:'Short Stack', cursive;background: radial-gradient(circle at 10% 10%, rgba(255,230,238,0.6), transparent 10%), radial-gradient(circle at 90% 90%, rgba(255,245,240,0.6), transparent 8%), linear-gradient(180deg,#fff 0%, #fff8f8 100%); overflow:hidden;}
+
+    /* Soft decorative bokeh */
+    .bokeh{position:fixed;inset:0;pointer-events:none;background-image:radial-gradient(circle at 15% 30%, rgba(255,200,220,0.08) 0 8%, transparent 9%),radial-gradient(circle at 80% 70%, rgba(200,220,255,0.06) 0 12%, transparent 13%);} 
+
+    .stage{
+      min-height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:26px;padding:36px;
+    }
+
+    .cards{
+      display:flex;flex-wrap:wrap;gap:18px;justify-content:center;align-items:center;perspective:1200px;max-width:1100px;
+    }
+
+    .card{
+      width:var(--cardW);min-height:120px;padding:22px 18px;border-radius:16px;background:linear-gradient(180deg,#fff 0%, #fff6f6 100%);box-shadow:0 18px 40px rgba(0,0,0,0.15);text-align:center;position:relative;transform-style:preserve-3d;cursor:pointer;transition:transform 450ms cubic-bezier(.2,.8,.2,1), box-shadow 350ms;overflow:hidden;
+      display:flex;align-items:center;justify-content:center;flex-direction:column;
+      animation: float 6s ease-in-out infinite;
+    }
+
+    /* subtle difference for image cards */
+    .card.image{min-height:220px;padding:14px}
+
+    .card:hover{transform:translateY(-6px) scale(1.02) rotateZ(0deg);box-shadow:0 30px 60px rgba(0,0,0,0.25)}
+
+    .card .line{font-family:'Zeyada',cursive;font-size:26px;color:var(--accent);opacity:0;transform:translateY(18px) scale(.98);animation:fadeUp 900ms forwards cubic-bezier(.2,.8,.2,1);}
+
+    .card .sub{font-family:'Short Stack';font-size:14px;color:#7b2a35;margin-top:8px;opacity:.9}
+
+    .card.final{background:linear-gradient(135deg,#fff7f7,#fff0f0);border:1px solid rgba(217,48,74,0.08)}
+
+    .card.final .heart{display:inline-block;margin-left:8px;font-size:28px;transform-origin:center;opacity:0;animation:pulse 800ms ease-in-out 200ms forwards infinite}
+
+    @keyframes pulse{
+      0%{transform:scale(0.9);opacity:0}
+      50%{transform:scale(1.12);opacity:1}
+      100%{transform:scale(1);opacity:1}
+    }
+
+    @keyframes fadeUp{
+      to{opacity:1;transform:translateY(0) scale(1)}
+    }
+
+    @keyframes float{
+      0%{transform:translateY(0) rotateZ(-1deg)}
+      50%{transform:translateY(-10px) rotateZ(2deg)}
+      100%{transform:translateY(0) rotateZ(-1deg)}
+    }
+
+    /* images inside cards */
+    .card img{max-height:160px;max-width:100%;display:block;border-radius:10px;object-fit:cover}
+
+    /* final message styling */
+    .reveal{font-size:22px;line-height:1.1}
+
+    /* floating hearts background */
+    .hearts{position:fixed;inset:0;pointer-events:none}
+    .heart-dot{position:absolute;font-size:20px;opacity:.12;filter:blur(0.2px);animation:rise 8s linear infinite}
+    @keyframes rise{0%{transform:translateY(100vh) scale(.6);opacity:0}10%{opacity:.5}50%{opacity:.9}100%{transform:translateY(-20vh) scale(1);opacity:0}}
+
+    /* replay button */
+    .controls{display:flex;gap:12px;align-items:center;margin-top:6px}
+    .btn{background:transparent;border:2px solid var(--accent);color:var(--accent);padding:8px 14px;border-radius:999px;font-family:'Short Stack';cursor:pointer;transition:all .25s}
+    .btn:hover{background:var(--accent);color:#fff}
+
+    /* confetti canvas sits on top */
+    #confetti{position:fixed;inset:0;pointer-events:none}
+
+    /* responsive tweaks */
+    @media (max-width:720px){:root{--cardW:300px}.card .line{font-size:22px}}
+  </style>
+</head>
+<body>
+  <div class="bokeh"></div>
+  <canvas id="confetti"></canvas>
+  <div class="hearts" aria-hidden="true"></div>
+
+  <main class="stage" role="main">
+    <h1 style="font-family:'Short Stack';margin:0 0 4px 0;color:#b13a44;">Just for you ✨</h1>
+    <div class="cards" aria-live="polite">
+
+      <!-- Short playful flirty lines -->
+      <div class="card">
+        <div class="line">Why you so cute? 😍</div>
+      </div>
+
+      <div class="card">
+        <div class="line">Stop stealing my heart ❤️</div>
+      </div>
+
+      <div class="card image">
+        <div class="line">Warning: You’re addictive 🔥</div>
+        <img src="images/H2.png" alt="cute" />
+      </div>
+
+      <div class="card image">
+        <div class="line">You’re the reason my heart races 💓</div>
+        <img src="images/2.jpeg" alt="smile" />
+      </div>
+
+      <div class="card image">
+        <div class="line">How can someone be this cute? ❤️</div>
+        <img src="images/3.jpg" alt="adorable" />
+      </div>
+
+      <div class="card final" aria-label="Final message">
+        <div class="line reveal">Every smile of yours feels like magic,</div>
+        <div class="line reveal">Every look steals my breath…</div>
+        <div class="line reveal">And now my heart has only one wish,</div>
+        <div class="line reveal">To call you mine <span class="heart">❤️</span></div>
+        <div class="sub" style="opacity:0.9;margin-top:10px;font-size:14px;color:#7b2a35">(and I fall in love with you)</div>
+      </div>
+
+    </div>
+
+    <div class="controls">
+      <button class="btn" id="replay">Replay</button>
+      <button class="btn" id="toggleConfetti">Toggle Confetti</button>
+    </div>
+  </main>
+
+  <script>
+    // Helper: pick random number in range
+    const rand = (min,max)=> Math.random()*(max-min)+min;
+
+    // Scatter effect: apply small random rotations/offsets on load
+    function scatterCards(){
+      const cards = document.querySelectorAll('.card');
+      cards.forEach((c,i)=>{
+        const r = rand(-8,8);
+        const tx = rand(-18,18);
+        const ty = rand(-8,8);
+        // keep float animation but add initial offset
+        c.style.transform = `translate(${tx}px, ${ty}px) rotate(${r}deg)`;
+        // slow down float a little based on index
+        c.style.animationDuration = `${5+ (i%3)}s`;
+      });
+    }
+
+    // Stagger reveal for lines
+    function revealLines(){
+      const allLines = document.querySelectorAll('.card .line');
+      allLines.forEach((line,idx)=>{
+        // small random jitter to feel organic
+        line.style.animationDelay = `${idx * 1.1 + (Math.random()*0.2)}s`;
+      });
+    }
+
+    // Hover 3D tilt
+    function enableTilt(){
+      const cards = document.querySelectorAll('.card');
+      cards.forEach(card=>{
+        card.addEventListener('mousemove', e=>{
+          const rect = card.getBoundingClientRect();
+          const x = (e.clientX - rect.left) / rect.width - 0.5; // -0.5 .. 0.5
+          const y = (e.clientY - rect.top) / rect.height - 0.5;
+          const ry = x * 10; // rotateY
+          const rx = -y * 8; // rotateX
+          card.style.transform = `rotateX(${rx}deg) rotateY(${ry}deg) translateZ(0)`;
+        });
+        card.addEventListener('mouseleave', ()=>{
+          // restore scattered transform
+          const r = rand(-8,8);
+          const tx = rand(-18,18);
+          const ty = rand(-8,8);
+          card.style.transform = `translate(${tx}px, ${ty}px) rotate(${r}deg)`;
+        });
+      });
+    }
+
+    // --- simple confetti system ---
+    const canvas = document.getElementById('confetti');
+    const ctx = canvas.getContext('2d');
+    let W = canvas.width = innerWidth;
+    let H = canvas.height = innerHeight;
+    let confetti = [];
+    let confettiEnabled = true;
+
+    window.addEventListener('resize', ()=>{W = canvas.width = innerWidth; H = canvas.height = innerHeight});
+
+    function Confetto(x,y,dx,dy,size,color){
+      this.x=x;this.y=y;this.dx=dx;this.dy=dy;this.size=size;this.color=color;this.tilt = rand(-10,10);this.spin = rand(-0.1,0.3);
+    }
+    Confetto.prototype.update = function(){
+      this.x += this.dx; this.y += this.dy; this.dy += 0.06; this.tilt += this.spin; if(this.y>H+50) this.y = -20, this.x = rand(0,W), this.dy = rand(1,3);
+    }
+    Confetto.prototype.draw = function(ctx){
+      ctx.save(); ctx.translate(this.x,this.y); ctx.rotate(this.tilt*0.02);
+      ctx.fillStyle = this.color; ctx.fillRect(-this.size/2, -this.size/2, this.size, this.size*1.4);
+      ctx.restore();
+    }
+
+    function spawnConfetti(amount){
+      const colors = ["#ff6b6b","#ffd166","#ff9a9e","#f67e7d","#ffd6e0","#f78fb3"];
+      for(let i=0;i<amount;i++){
+        const x = rand(0,W); const y = rand(-H*0.2, H*0.2);
+        const dx = rand(-1.5,1.5); const dy = rand(1,4);
+        const size = Math.floor(rand(6,14));
+        confetti.push(new Confetto(x,y,dx,dy,size,colors[Math.floor(rand(0,colors.length))]));
+      }
+    }
+
+    function renderConfetti(){
+      if(!confettiEnabled) return;
+      ctx.clearRect(0,0,W,H);
+      for(let i=0;i<confetti.length;i++){ confetti[i].update(); confetti[i].draw(ctx); }
+      // keep array from growing forever
+      if(confetti.length>400) confetti.splice(0, confetti.length-250);
+      requestAnimationFrame(renderConfetti);
+    }
+
+    // small floating hearts in background
+    function spawnHearts(){
+      const hearts = document.querySelector('.hearts');
+      for(let i=0;i<20;i++){
+        const el = document.createElement('div'); el.className='heart-dot'; el.innerText='❤️';
+        el.style.left = Math.floor(rand(0,100)) + 'vw';
+        el.style.fontSize = Math.floor(rand(12,36)) + 'px';
+        el.style.animationDuration = `${rand(6,12)}s`;
+        el.style.opacity = rand(0.06,0.25);
+        hearts.appendChild(el);
+      }
+    }
+
+    // launch confetti gently
+    function launchConfetti(){ spawnConfetti(80); }
+
+    // reset animations (for replay)
+    function resetAndPlay(){
+      // clear confetti
+      confetti = [];
+      // restart lines animation by toggling a class
+      const lines = document.querySelectorAll('.card .line');
+      lines.forEach(l=>{
+        l.style.animation = 'none';
+        // force reflow
+        void l.offsetWidth;
+        l.style.animation = '';
+      });
+      // small delay to re-trigger
+      setTimeout(()=>{
+        revealLines();
+        launchConfetti();
+      },100);
+    }
+
+    // initial setup
+    document.addEventListener('DOMContentLoaded', ()=>{
+      scatterCards(); revealLines(); enableTilt(); spawnHearts(); renderConfetti();
+
+      // auto-trigger confetti after the final line appears
+      const finalLines = document.querySelectorAll('.card.final .line');
+      const when = finalLines.length * 1100 + 400; // approximate
+      setTimeout(()=>{ if(confettiEnabled) launchConfetti(); }, when);
+
+      // buttons
+      document.getElementById('replay').addEventListener('click', ()=>{ resetAndPlay(); });
+      document.getElementById('toggleConfetti').addEventListener('click', ()=>{ confettiEnabled = !confettiEnabled; if(!confettiEnabled) ctx.clearRect(0,0,W,H); else renderConfetti(); });
+    });
+  </script>
+</body>
+</html>
